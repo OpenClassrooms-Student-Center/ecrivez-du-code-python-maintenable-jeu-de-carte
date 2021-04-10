@@ -10,7 +10,7 @@ from models.player import Player
 class Controller:
     """Main controller."""
 
-    def __init__(self, deck: Deck, view):
+    def __init__(self, deck: Deck, view, checker_strategy):
         """Has a deck, a list of players and a view."""
         # models
         self.players: List[Player] = []
@@ -18,6 +18,9 @@ class Controller:
 
         # views
         self.view = view
+
+        # check strategy
+        self.checker_strategy = checker_strategy
 
     def get_players(self):
         """Get some players."""
@@ -29,28 +32,8 @@ class Controller:
             self.players.append(player)
 
     def evaluate_game(self):
-        last_player = self.players[0]
-        best_candidate = self.players[0]
-
-        for player in self.players[1:]:
-            player_card = player.hand[0]
-            last_player_card = last_player.hand[0]
-
-            score = (RANKS.index(player_card.rank), SUITS.index(player_card.suit))
-            last_score = (
-                RANKS.index(last_player_card.rank),
-                SUITS.index(last_player_card.suit),
-            )
-
-            if score[0] == last_score[0]:
-                if score[1] > last_score[1]:
-                    best_candidate = player
-            elif score[0] > last_score[0]:
-                best_candidate = player
-
-            last_player = player
-
-        return best_candidate.name
+        """Evaluate the game."""
+        return self.checker_strategy.check(self.players)
 
     def rebuild_deck(self):
         """Rebuild the deck."""

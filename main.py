@@ -2,13 +2,15 @@
 
 from models.deck import Deck
 from controllers.base import Controller
+from controllers.evaluate import CheckerRankAndSuitIndex
 from views.base import View
 
 
 def main():
     deck = Deck()
     view = View()
-    game = Controller(deck, view)
+    checker = CheckerRankAndSuitIndex()
+    game = Controller(deck, view, checker)
     game.run()
 
 
