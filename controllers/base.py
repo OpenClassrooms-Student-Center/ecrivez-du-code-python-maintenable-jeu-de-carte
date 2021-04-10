@@ -9,23 +9,21 @@ from models.player import Player
 class Controller:
     """Main controller."""
 
-    def __init__(self, deck: Deck, active_view, views, checker_strategy):
+    def __init__(self, deck: Deck, view, checker_strategy):
         """Has a deck, a list of players and a view."""
         # models
         self.players: List[Player] = []
         self.deck = deck
 
         # views
-        self.active_view = active_view
-        self.views = views
+        self.view = view
 
         # check strategy
         self.checker_strategy = checker_strategy
 
     def get_players(self):
-        max_players = 5
-        while len(self.players) < max_players:
-            name = self.active_view.prompt_for_player()
+        while len(self.players) < 5:  # nombre magique
+            name = self.view.prompt_for_player()
             if not name:
                 return
             player = Player(name)
@@ -58,21 +56,18 @@ class Controller:
         running = True
         while running:
             self.start_game()
+
             for player in self.players:
+                self.view.show_player_hand(player.name, player.hand)
 
-                for view in self.views:
-                    view.show_player_hand(player.name, player.hand)
-
-            self.active_view.prompt_for_flip_cards()
+            self.view.prompt_for_flip_cards()
 
             for player in self.players:
                 for card in player.hand:
                     card.is_face_up = True
+                self.view.show_player_hand(player.name, player.hand)
 
-                for view in self.views:
-                    view.show_player_hand(player.name, player.hand)
-            for view in self.views:
-                view.show_winner(self.evaluate_game())
+            self.view.show_winner(self.evaluate_game())
 
-            running = self.active_view.prompt_for_new_game()
+            running = self.view.prompt_for_new_game()
             self.rebuild_deck()

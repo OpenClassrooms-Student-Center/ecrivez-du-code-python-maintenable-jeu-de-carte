@@ -1,39 +1,32 @@
 """Base view."""
 
 
-class PlayerView:
-    """Player view."""
+class Views:
+    """Implement the other views."""
+
+    def __init__(self, active_view, views):
+        """Init the active view and the passives views."""
+        self.active_view = active_view
+        self.views = views
 
     def prompt_for_player(self):
-        """Prompt for a name."""
-        name = input("tapez le nom du joueur : ")
-        if not name:
-            return None
-        return name
+        """Call the active view."""
+        return self.active_view.prompt_for_player()
 
     def show_player_hand(self, name, hand):
-        """Show the player hand."""
-        print(f"[Joueur {name}]")
-        for card in hand:
-            if card.is_face_up:
-                print(card)
-            else:
-                print("(carte face cachée)")
+        """Call the passive views."""
+        for view in self.views:
+            view.show_player_hand(name, hand)
 
     def prompt_for_flip_cards(self):
-        """Request to return the cards."""
-        print()
-        input("Prêt à retourner les cartes ?")
-        return True
+        """Call the active view."""
+        return self.active_view.prompt_for_flip_cards()
 
     def show_winner(self, name):
-        """Show the winner."""
-        print(f"Bravo {name} !")
+        """Call the passive views."""
+        for view in self.views:
+            view.show_winner(name)
 
     def prompt_for_new_game(self):
-        """Request to replay."""
-        print("Souhaitez vous refaire une partie ?")
-        choice = input("Y/n: ")
-        if choice == "n":
-            return False
-        return True
+        """Call the active view."""
+        return self.active_view.prompt_for_new_game()
