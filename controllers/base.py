@@ -9,31 +9,27 @@ from models.player import Player
 class Controller:
     """Main controller."""
 
-    def __init__(self, deck: Deck, views, checker_strategy):
+    def __init__(self, deck: Deck, active_view, views, checker_strategy):
         """Has a deck, a list of players and a view."""
         # models
         self.players: List[Player] = []
         self.deck = deck
 
         # views
+        self.active_view = active_view
         self.views = views
 
         # check strategy
         self.checker_strategy = checker_strategy
 
     def get_players(self):
-        while len(self.players) < 5:  # nombre magique
-            choices = []
-            for view in self.views:
-                name = view.prompt_for_player()
-                choices.append(name)
-                if not any(choices):
-                    return
-            for choice in choices:
-                if choice:
-                    name = choice
-                    player = Player(name)
-                    self.players.append(player)
+        max_players = 5
+        while len(self.players) < max_players:
+            name = self.active_view.prompt_for_player()
+            if not name:
+                return
+            player = Player(name)
+            self.players.append(player)
 
     def evaluate_game(self):
         """Evaluate the game."""
@@ -67,23 +63,16 @@ class Controller:
                 for view in self.views:
                     view.show_player_hand(player.name, player.hand)
 
-            for view in self.views:
-                view.prompt_for_flip_cards()
-            print()
+            self.active_view.prompt_for_flip_cards()
 
             for player in self.players:
                 for card in player.hand:
                     card.is_face_up = True
+
                 for view in self.views:
                     view.show_player_hand(player.name, player.hand)
-            print()
-
             for view in self.views:
                 view.show_winner(self.evaluate_game())
 
-            for view in self.views:
-                running = view.prompt_for_new_game()
-                if not running:
-                    return
-
+            running = self.active_view.prompt_for_new_game()
             self.rebuild_deck()

@@ -10,9 +10,10 @@ from views.internet import InternetStreamingView
 
 def main():
     deck = Deck()
-    views = (PlayerView(), BroadcastView(), InternetStreamingView())
+    view = PlayerView()
+    views = (view, BroadcastView(), InternetStreamingView())
     checker = CheckerRankAndSuitIndex()
-    game = Controller(deck, views, checker)
+    game = Controller(deck, view, views, checker)
     game.run()
 
 
