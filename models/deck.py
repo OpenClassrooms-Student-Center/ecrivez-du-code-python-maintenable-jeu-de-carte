@@ -1,5 +1,6 @@
 """Define the Deck."""
 
+from typing import Optional
 import random
 
 from .card import RANKS, SUITS, Card
@@ -20,7 +21,7 @@ class Deck(list):
         """Shuffle the deck."""
         random.shuffle(self)
 
-    def draw_card(self):
+    def draw_card(self) -> Optional[Card]:
         """Draw the top card."""
         try:
             return self.pop()

@@ -18,3 +18,5 @@ if __name__ == "__main__":
     player = Player("John")
     player.hand.append(deck.draw_card())
     print(player.hand)
+
+    # On ne peut pas encore tester notre controller. ;)

@@ -1,5 +1,7 @@
 """Player and Hand."""
 
+from typing import List
+
 from .card import Card
 
 
@@ -19,4 +21,4 @@ class Player:
     def __init__(self, name):
         """Has a name and a hand."""
         self.name = name
-        self.hand = Hand()
+        self.hand: List[Card] = Hand()
