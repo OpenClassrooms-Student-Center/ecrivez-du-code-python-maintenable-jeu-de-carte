@@ -2,6 +2,7 @@
 
 from models.card import Card
 from models.deck import Deck
+from models.player import Player
 
 
 if __name__ == "__main__":
@@ -13,3 +14,7 @@ if __name__ == "__main__":
 
     deck = Deck()
     print(deck)
+
+    player = Player("John")
+    player.hand.append(deck.draw_card())
+    print(player.hand)
