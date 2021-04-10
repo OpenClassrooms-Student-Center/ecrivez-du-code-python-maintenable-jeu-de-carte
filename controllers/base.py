@@ -2,6 +2,7 @@
 
 from typing import List
 
+from models.card import SUITS, RANKS
 from models.deck import Deck
 from models.player import Player
 
@@ -28,7 +29,6 @@ class Controller:
             self.players.append(player)
 
     def evaluate_game(self):
-        """Evaluate the best player."""
         last_player = self.players[0]
         best_candidate = self.players[0]
 
@@ -36,7 +36,16 @@ class Controller:
             player_card = player.hand[0]
             last_player_card = last_player.hand[0]
 
-            if player_card > last_player_card:
+            score = (RANKS.index(player_card.rank), SUITS.index(player_card.suit))
+            last_score = (
+                RANKS.index(last_player_card.rank),
+                SUITS.index(last_player_card.suit),
+            )
+
+            if score[0] == last_score[0]:
+                if score[1] > last_score[1]:
+                    best_candidate = player
+            elif score[0] > last_score[0]:
                 best_candidate = player
 
             last_player = player
